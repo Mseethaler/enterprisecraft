@@ -3,6 +3,10 @@
 [ext_resource type="Script" uid="uid://cxs4uhk2c168c" path="res://scripts/websocket_client.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://c704ox80fwary" path="res://scripts/building_manager.gd" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://c7ovkoti02aqj" path="res://scripts/camera.gd" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://bagyhuwtea27k" path="res://scripts/unit_manager.gd" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://c05pjddp5bdis" path="res://scripts/hud.gd" id="5_lquwl"]
+[ext_resource type="Script" uid="uid://tpr5ar3n27yh" path="res://scripts/input_manager.gd" id="6_7mycd"]
+[ext_resource type="Script" uid="uid://p8l5i2wolgp0" path="res://ContextMenu.gd" id="6_272bh"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ig7tw"]
 size = Vector2(200, 200)
@@ -10,7 +14,7 @@ size = Vector2(200, 200)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
 albedo_color = Color(0.03529412, 0.1882353, 0, 1)
 
-[node name="Node3D" type="Node3D" unique_id=1811582612]
+[node name="Node3D" type="Node3D" unique_id=1811582612 groups=["websocket_client"]]
 script = ExtResource("1_ig7tw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=159862986]
@@ -28,3 +32,46 @@ shadow_enabled = true
 
 [node name="BuildingManager" type="Node3D" parent="." unique_id=598291183]
 script = ExtResource("2_0xm2m")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BuildingManager" unique_id=1310684958]
+
+[node name="UnitManager" type="Node3D" parent="." unique_id=1082672735 groups=["unit_manager"]]
+script = ExtResource("4_1bvp3")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=2068914107]
+script = ExtResource("5_lquwl")
+
+[node name="CashLabel" type="Label" parent="HUD" unique_id=1057828948]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 85.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 24
+text = "Cash: $0"
+
+[node name="AlertLabel" type="Label" parent="HUD" unique_id=104208121]
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 115.0
+offset_bottom = 94.0
+theme_override_font_sizes/font_size = 24
+text = "Alerts: 0"
+
+[node name="ContextMenu" type="Control" parent="HUD" unique_id=790182916]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("6_272bh")
+
+[node name="Panel" type="PanelContainer" parent="HUD/ContextMenu" unique_id=1221821082]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/ContextMenu/Panel" unique_id=1821631121]
+layout_mode = 2
+
+[node name="InputManager" type="Node" parent="." unique_id=1130898831 node_paths=PackedStringArray("camera") groups=["input_manager"]]
+script = ExtResource("6_7mycd")
+camera = NodePath("../Camera")
