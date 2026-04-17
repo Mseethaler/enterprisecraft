@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cdm6re05dbj7s"]
+
+[ext_resource type="Script" uid="uid://cxs4uhk2c168c" path="res://scripts/websocket_client.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://c704ox80fwary" path="res://scripts/building_manager.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://c7ovkoti02aqj" path="res://scripts/camera.gd" id="2_h2yge"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ig7tw"]
+size = Vector2(200, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+albedo_color = Color(0.03529412, 0.1882353, 0, 1)
+
+[node name="Node3D" type="Node3D" unique_id=1811582612]
+script = ExtResource("1_ig7tw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=159862986]
+mesh = SubResource("PlaneMesh_ig7tw")
+surface_material_override/0 = SubResource("StandardMaterial3D_0xm2m")
+
+[node name="Camera" type="Camera3D" parent="." unique_id=1153815196]
+transform = Transform3D(0.8660254, -0.43301272, 0.24999999, 0, 0.49999997, 0.86602545, -0.5, -0.75, 0.43301266, 0, 40, 40)
+script = ExtResource("2_h2yge")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1330008054]
+transform = Transform3D(0.8660254, -0.43301272, 0.24999999, 0, 0.49999997, 0.86602545, -0.5, -0.75, 0.43301266, 0, 50, 20)
+light_energy = 2.0
+shadow_enabled = true
+
+[node name="BuildingManager" type="Node3D" parent="." unique_id=598291183]
+script = ExtResource("2_0xm2m")
