@@ -35,6 +35,9 @@ func _handle_selling(doctype: String, docname: String, payload: Dictionary, trig
 			var um = get_tree().get_first_node_in_group("unit_manager")
 			if um:
 				um.set_unit_confirmed(docname)
+			var log = get_tree().get_first_node_in_group("command_log")
+			if log:
+				log.log_command("convert_lead", docname, "confirmed")
 		"Opportunity":
 			_upsert_in_list(WorldState.state["selling"]["pipeline"], "opportunities_list", docname, payload)
 		"Sales Order":

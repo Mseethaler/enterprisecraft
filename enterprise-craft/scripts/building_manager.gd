@@ -54,33 +54,39 @@ func spawn_buildings() -> void:
 			_spawn_building(building_id)
 
 func _spawn_building(building_id: String) -> void:
-	# Wrap in StaticBody3D for raycast collision
 	var body = StaticBody3D.new()
 	body.name = building_id
 	body.set_meta("building_id", building_id)
 
-	var mesh_node = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	mesh.size = Vector3(8, 10, 8)
-	mesh_node.mesh = mesh
+	# Try to load a real model
+	var model_path = "res://assets/models/buildings/%s.glb" % building_id
+	if ResourceLoader.exists(model_path):
+		var scene = load(model_path)
+		var instance = scene.instantiate()
+		instance.scale = Vector3(10, 10, 10)
+		body.add_child(instance)
+	else:
+		# Fallback to placeholder box
+		var mesh_node = MeshInstance3D.new()
+		var mesh = BoxMesh.new()
+		mesh.size = Vector3(8, 10, 8)
+		mesh_node.mesh = mesh
+		var mat = StandardMaterial3D.new()
+		mat.albedo_color = BUILDING_COLORS.get(building_id, Color(0.5, 0.5, 0.5))
+		mat.emission_enabled = true
+		mat.emission = Color(0, 0, 0)
+		mesh_node.material_override = mat
+		body.add_child(mesh_node)
 
-	var mat = StandardMaterial3D.new()
-	mat.albedo_color = BUILDING_COLORS.get(building_id, Color(0.5, 0.5, 0.5))
-	mat.emission_enabled = true
-	mat.emission = Color(0, 0, 0)
-	mesh_node.material_override = mat
-
+	# Always add collision
 	var collision = CollisionShape3D.new()
 	var shape = BoxShape3D.new()
 	shape.size = Vector3(8, 10, 8)
 	collision.shape = shape
-
-	body.add_child(mesh_node)
 	body.add_child(collision)
 
 	var pos = BUILDING_POSITIONS[building_id]
-	body.position = Vector3(pos.x, 5, pos.z)
-
+	body.position = Vector3(pos.x, 0, pos.z)
 	add_child(body)
 	buildings[building_id] = body
 	print("[buildings] spawned: ", building_id)

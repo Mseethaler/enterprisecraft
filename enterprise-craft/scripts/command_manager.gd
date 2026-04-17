@@ -35,21 +35,21 @@ const COMMAND_MAP = {
 
 var _cmd_counter: int = 0
 
-func issue_command(label: String, doctype: String, docname: String, data: Dictionary = {}) -> void:
+func issue_command(label: String, doctype: String, docname: String, _data: Dictionary = {}) -> void:
 	if not COMMAND_MAP.has(label):
-		print("[cmd] no command mapped for: ", label)
 		return
-
 	var cmd_def = COMMAND_MAP[label]
-
 	if cmd_def["command_type"] == "inspect":
-		print("[cmd] inspect: ", docname)
 		return
 
-	# Set unit to pending state immediately
 	var unit_manager = get_tree().get_first_node_in_group("unit_manager")
 	if unit_manager:
 		unit_manager.set_unit_pending(docname)
+
+	# Log as pending
+	var log = get_tree().get_first_node_in_group("command_log")
+	if log:
+		log.log_command(cmd_def["command_type"], docname, "pending")
 
 	_cmd_counter += 1
 	var command = {
@@ -62,7 +62,6 @@ func issue_command(label: String, doctype: String, docname: String, data: Dictio
 		"issued_by": "commander",
 		"timestamp": Time.get_datetime_string_from_system()
 	}
-
 	print("[cmd] issuing: ", command)
 	_send_command(command)
 
@@ -74,3 +73,4 @@ func _send_command(command: Dictionary) -> void:
 	var json = JSON.stringify(command)
 	ws.socket.send_text(json)
 	print("[cmd] sent: ", command["command_type"], " on ", command["docname"])
+	
