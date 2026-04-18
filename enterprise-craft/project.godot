@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 WorldState="*uid://fs20hd4gq7qq"
 DiffEngine="*uid://wx2rffumisck"
 CommandManager="*uid://25qoy1662lto"
+DocumentFetcher="*uid://ccja06imf1q5r"
 
 [physics]
 

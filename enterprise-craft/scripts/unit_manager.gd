@@ -2,18 +2,15 @@ extends Node3D
 
 # Active units on the map keyed by docname
 var units = {}
-# Add these constants at the top
-const COLOR_PENDING = Color(1.0, 1.0, 0.0)    # Yellow shimmer
-const COLOR_confirmed = Color(0.2, 1.0, 0.2)   # Brief green flash
-const COLOR_ERROR = Color(1.0, 0.1, 0.1)       # Red flash
 
-# Add these variables
+const COLOR_PENDING = Color(1.0, 1.0, 0.0)
+const COLOR_confirmed = Color(0.2, 1.0, 0.2)
+const COLOR_ERROR = Color(1.0, 0.1, 0.1)
+
 var pending_units = {}
 var shimmer_timers = {}
 
-# Add to _process
 func _process(delta: float) -> void:
-	# Shimmer pending units
 	for docname in shimmer_timers.keys():
 		shimmer_timers[docname] += delta
 		if units.has(docname):
@@ -63,14 +60,11 @@ func _flash_unit(docname: String, color: Color, duration: float) -> void:
 	mat.emission_enabled = true
 	mat.emission = color
 	mat.emission_energy_multiplier = 0.8
-	# Return to normal after duration
 	await get_tree().create_timer(duration).timeout
 	if not pending_units.has(docname):
 		mat.emission_enabled = false
 		mat.emission = Color(0, 0, 0)
-		
 
-# Unit colors by doctype
 const UNIT_COLORS = {
 	"Lead": Color(0.2, 0.6, 1.0),
 	"Opportunity": Color(0.1, 0.9, 0.3),
@@ -80,7 +74,6 @@ const UNIT_COLORS = {
 	"Employee": Color(0.9, 0.7, 0.4)
 }
 
-# Spawn zone positions per doctype
 const SPAWN_ZONES = {
 	"Lead": Vector3(20, 0, -30),
 	"Opportunity": Vector3(25, 0, -25),
@@ -103,37 +96,37 @@ func _on_state_updated(module: String) -> void:
 			_sync_employees()
 
 func _sync_leads() -> void:
-	var leads = WorldState.state["selling"]["pipeline"].get("leads_list", [])
+	var leads = WorldState.state["selling"]["pipeline"].get("leads", [])
 	for lead in leads:
-		var docname = lead.get("name", "")
+		var docname = lead if lead is String else lead.get("name", "")
 		if docname == "":
 			continue
 		if not units.has(docname):
-			_spawn_unit(docname, "Lead", lead)
+			_spawn_unit(docname, "Lead", {"name": docname})
 		else:
-			_update_unit(docname, lead)
+			_update_unit(docname, {"name": docname})
 
 func _sync_projects() -> void:
 	var projects = WorldState.state["projects"]["active"]
 	for project in projects:
-		var docname = project.get("name", "")
+		var docname = project if project is String else project.get("name", "")
 		if docname == "":
 			continue
 		if not units.has(docname):
-			_spawn_unit(docname, "Project", project)
+			_spawn_unit(docname, "Project", {"name": docname})
 		else:
-			_update_unit(docname, project)
+			_update_unit(docname, {"name": docname})
 
 func _sync_employees() -> void:
 	var employees = WorldState.state["hr"]["employees"]
 	for emp in employees:
-		var docname = emp.get("name", "")
+		var docname = emp if emp is String else emp.get("name", "")
 		if docname == "":
 			continue
 		if not units.has(docname):
-			_spawn_unit(docname, "Employee", emp)
+			_spawn_unit(docname, "Employee", {"name": docname})
 		else:
-			_update_unit(docname, emp)
+			_update_unit(docname, {"name": docname})
 
 func _spawn_unit(docname: String, doctype: String, data: Dictionary) -> void:
 	var body = StaticBody3D.new()

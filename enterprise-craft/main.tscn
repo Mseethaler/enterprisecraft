@@ -22,7 +22,7 @@ script = ExtResource("1_ig7tw")
 mesh = SubResource("PlaneMesh_ig7tw")
 surface_material_override/0 = SubResource("StandardMaterial3D_0xm2m")
 
-[node name="Camera" type="Camera3D" parent="." unique_id=1153815196]
+[node name="Camera" type="Camera3D" parent="." unique_id=1153815196 groups=["main_camera"]]
 transform = Transform3D(0.8660254, -0.43301272, 0.24999999, 0, 0.49999997, 0.86602545, -0.5, -0.75, 0.43301266, 0, 40, 40)
 script = ExtResource("2_h2yge")
 
@@ -39,7 +39,7 @@ script = ExtResource("2_0xm2m")
 [node name="UnitManager" type="Node3D" parent="." unique_id=1082672735 groups=["unit_manager"]]
 script = ExtResource("4_1bvp3")
 
-[node name="HUD" type="CanvasLayer" parent="." unique_id=2068914107]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=2068914107 groups=["hud"]]
 script = ExtResource("5_lquwl")
 
 [node name="CashLabel" type="Label" parent="HUD" unique_id=1057828948]
@@ -80,6 +80,18 @@ offset_right = 420.0
 offset_bottom = 380.0
 script = ExtResource("7_5vw27")
 
-[node name="InputManager" type="Node" parent="." unique_id=1130898831 node_paths=PackedStringArray("camera") groups=["input_manager"]]
+[node name="SelectionPanel" type="VBoxContainer" parent="HUD" unique_id=63108528]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Name" type="Label" parent="HUD/SelectionPanel" unique_id=1817770739]
+layout_mode = 2
+
+[node name="Doctype" type="Label" parent="HUD/SelectionPanel" unique_id=215160399]
+layout_mode = 2
+
+[node name="Status" type="Label" parent="HUD/SelectionPanel" unique_id=505332201]
+layout_mode = 2
+
+[node name="InputManager" type="Node" parent="." unique_id=1130898831 groups=["input_manager"]]
 script = ExtResource("6_7mycd")
-camera = NodePath("../Camera")

@@ -68,3 +68,68 @@ func get_project(doc_name: String) -> Dictionary:
 		if proj.get("name") == doc_name:
 			return proj
 	return {}
+	
+func load_snapshot(snapshot: Dictionary) -> void:
+	print("[world_state] loading snapshot...")
+	
+	# Selling
+	if snapshot.has("selling"):
+		var s = snapshot["selling"]
+		state["selling"]["pipeline"] = {
+			"leads": s.get("leads", []),
+			"opportunities": s.get("opportunities", []),
+			"quotations": s.get("quotations", [])
+		}
+		state["selling"]["orders"] = {
+			"sales_orders": s.get("sales_orders", []),
+			"delivery_notes": s.get("delivery_notes", []),
+			"delivery_trips": s.get("delivery_trips", [])
+		}
+		state["selling"]["invoices"] = {
+			"sales_invoices": s.get("sales_invoices", []),
+			"payment_entries_inbound": s.get("payment_entries_inbound", [])
+		}
+		state["selling"]["customers"] = s.get("customers", [])
+		emit_signal("state_updated", "selling")
+	
+	# Buying
+	if snapshot.has("buying"):
+		var b = snapshot["buying"]
+		state["buying"]["suppliers"] = b.get("suppliers", [])
+		state["buying"]["purchase_orders"] = b.get("purchase_orders", [])
+		state["buying"]["invoices"] = {
+			"purchase_invoices": b.get("purchase_invoices", []),
+			"payment_entries_outbound": b.get("payment_entries_outbound", [])
+		}
+		emit_signal("state_updated", "buying")
+	
+	# Accounting
+	if snapshot.has("accounting"):
+		var a = snapshot["accounting"]
+		state["accounting"]["chart_of_accounts"] = a.get("accounts", [])
+		state["accounting"]["bank_transactions"] = a.get("bank_transactions", [])
+		emit_signal("state_updated", "accounting")
+	
+	# HR
+	if snapshot.has("hr"):
+		var h = snapshot["hr"]
+		state["hr"]["employees"] = h.get("employees", [])
+		state["hr"]["attendance"] = h.get("attendance", [])
+		emit_signal("state_updated", "hr")
+	
+	# Projects
+	if snapshot.has("projects"):
+		var p = snapshot["projects"]
+		state["projects"]["active"] = p.get("projects", [])
+		state["projects"]["tasks"] = p.get("tasks", [])
+		emit_signal("state_updated", "projects")
+	
+	# Stock
+	if snapshot.has("stock"):
+		var st = snapshot["stock"]
+		state["stock"]["physical"] = {
+			"items": st.get("items", [])
+		}
+		emit_signal("state_updated", "stock")
+	
+	print("[world_state] snapshot loaded — modules populated")
