@@ -63,7 +63,7 @@ func _spawn_building(building_id: String) -> void:
 	if ResourceLoader.exists(model_path):
 		var scene = load(model_path)
 		var instance = scene.instantiate()
-		instance.scale = Vector3(10, 10, 10)
+		instance.scale = Vector3(6, 6, 6)
 		body.add_child(instance)
 	else:
 		# Fallback to placeholder box

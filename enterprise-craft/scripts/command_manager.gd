@@ -40,6 +40,11 @@ func issue_command(label: String, doctype: String, docname: String, _data: Dicti
 		return
 	var cmd_def = COMMAND_MAP[label]
 	if cmd_def["command_type"] == "inspect":
+		DocumentFetcher.fetch(doctype, docname, func(doc):
+			var detail_panel = get_tree().get_first_node_in_group("detail_panel")
+			if detail_panel:
+				detail_panel.open(doctype, docname, doc)
+		)
 		return
 
 	var unit_manager = get_tree().get_first_node_in_group("unit_manager")

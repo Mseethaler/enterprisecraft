@@ -3,14 +3,25 @@ extends CanvasLayer
 @onready var cash_label = $CashLabel
 @onready var alert_label = $AlertLabel
 @onready var selection_panel = $SelectionPanel
-@onready var selection_name = $SelectionPanel/Name
-@onready var selection_doctype = $SelectionPanel/Doctype
-@onready var selection_status = $SelectionPanel/Status
+@onready var selection_name = $SelectionPanel/VBoxContainer/Name
+@onready var selection_doctype = $SelectionPanel/VBoxContainer/Doctype
+@onready var selection_status = $SelectionPanel/VBoxContainer/Status
 
 func _ready() -> void:
 	WorldState.state_updated.connect(_on_state_updated)
 	WorldState.alert_added.connect(_on_alert_added)
 	selection_panel.hide()
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.1, 0.1, 0.15, 0.85)
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	style.content_margin_top = 4
+	style.content_margin_bottom = 25
+	selection_panel.add_theme_stylebox_override("panel", style)
 
 func _on_state_updated(module: String) -> void:
 	if module == "accounting":
