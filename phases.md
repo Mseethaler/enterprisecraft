@@ -36,3 +36,53 @@ Command type definitions
 Connection/config model
 
 ## Phase 1 specification documents.
+
+
+Modules:
+
+
+Selling
+
+Lead
+Opportunity
+Quotation
+Sales Order
+Delivery Note
+Sales Invoice
+Payment Entry (inbound)
+Customers
+
+Buying
+
+Supplier
+Purchase Order
+Purchase Invoice
+Payment Entry (outbound)
+
+Accounting
+
+Bank Transaction
+Journal Entry
+Account (Chart of Accounts)
+Payment Entry
+
+HR
+
+Employee
+Attendance
+Leave Application
+Timesheet
+Timesheet Detail (Task)
+
+Projects
+
+Project
+Task
+
+Stock
+
+Item
+Stock Entry
+Warehouse
+Bin (stock levels per item per warehouse)
+
